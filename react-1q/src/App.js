@@ -5,15 +5,161 @@ import Web3 from 'web3';
 import React, { useEffect, useState } from 'react';
 
 
-const lotteryAddress = '0xF7a66886D540b1884606f850Ab65e63eD550a5C3';
-const lotteryABI = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function", "constant": true }, { "inputs": [ { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "calculateSHA256", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "pure", "type": "function", "constant": true }, { "inputs": [ { "internalType": "uint256", "name": "_seed", "type": "uint256" } ], "name": "SaveBetInfo", "outputs": [ { "internalType": "bool", "name": "result", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "OpenWinner", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" }, { "internalType": "bytes32", "name": "", "type": "bytes32" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "nonpayable", "type": "function" } ];
+const lotteryAddress = '0x79927D7df76698C6B38bB1ac5c7bDd1D280aA7B8';
+const lotteryABI = [
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "_seed",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "applicant",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "randNum",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "application",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "seed",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInfo",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "getSeed",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "deleteApl",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "draw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRand",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  }
+];
+
 function App() {
   const [lotteryContract, setLotteryContract] = useState(null);
   const [seednum, setSeednum] = useState("");
   const [account, setAccount] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  // const [countdown, setCountdown] = useState(10);
   const [openWinnerResult, setOpenWinnerResult] = useState(null);
+  const [randNum, setrandNum] = useState(null);
+
 
 
 
@@ -68,35 +214,32 @@ function App() {
   }
 
   const saveBet = async () => {
-    if (!seednum) {
-      console.log('Please enter a valid seed number.');
-      return;
-    }
-
     try {
       const nonce = await window.web3.eth.getTransactionCount(account);
-      await lotteryContract.methods.SaveBetInfo(seednum).send({
+      let a = await lotteryContract.methods.application().send({
         from: account,
         nonce: nonce,
       });
 
-      console.log('Bet saved successfully!');
+      console.log(a);
+
+      console.log('saved successfully!');
 
 
       // Start the countdown and disable the button
-      setCountdown(10);
-      setIsButtonDisabled(true);
+      // setCountdown(10);
+      // setIsButtonDisabled(true);
       
-      const countdownInterval = setInterval(() => {
-        setCountdown((prevCount) => prevCount - 1);
-      }, 1000);
+      // const countdownInterval = setInterval(() => {
+      //   setCountdown((prevCount) => prevCount - 1);
+      // }, 1000);
 
-      // After 10 seconds, reset the countdown and enable the button
-      setTimeout(() => {
-        clearInterval(countdownInterval);
-        setIsButtonDisabled(false);
-        setCountdown(10);
-      }, 10000);
+      // // After 10 seconds, reset the countdown and enable the button
+      // setTimeout(() => {
+      //   clearInterval(countdownInterval);
+      //   setIsButtonDisabled(false);
+      //   setCountdown(10);
+      // }, 10000);
 
     } catch (error) {
       console.error('Error saving bet:', error);
@@ -106,7 +249,7 @@ function App() {
   const openWinner = async () => {
     try {
       //const currentBet = /* Create a BetInfo object based on user input */
-      const result = await lotteryContract.methods.OpenWinner().call();
+      const result = await lotteryContract.methods.getInfo(0).call();
 
       // Set the OpenWinner result
       setOpenWinnerResult(result);
@@ -114,32 +257,84 @@ function App() {
       console.error('Error opening winner:', error);
     }
   }
+
+  const openRandNum = async () => {
+    const rand = await lotteryContract.methods.getRand().call();
+    console.log(rand)
+    setrandNum(rand.toString());
+  }
+
+  const getseednum = async () => {
+    let seedd = (await lotteryContract.methods.getSeed().call());
+    console.log(seedd);
+    setSeednum(seedd.toString());
+    console.log("get seed complete")
+  }
+
+  const deletearray = async () => {
+    const nonce = await window.web3.eth.getTransactionCount(account);
+    await lotteryContract.methods.deleteApl().send({
+      from: account,
+      nonce: nonce,
+    });
+    console.log("delete complete!!")
+  }
+
+  const drawlot = async () => {
+    const nonce = await window.web3.eth.getTransactionCount(account);
+    await lotteryContract.methods.draw().send({
+      from: account,
+      nonce: nonce,
+    });
+    console.log("draw complete!!")
+  }
+
+  
+  
   
 
 
   return (
     <div className="App">
-      <h1>Lottery Betting App</h1>
-      <input
+      <h1>1Q On The Block</h1>
+      {/* <input
         type="number"
         value={seednum}
         onChange={(e) => setSeednum(Number(e.target.value))}
-      />
-      <button onClick={saveBet} disabled={isButtonDisabled}>
-        {isButtonDisabled ? `Saving... (${countdown}s)` : 'Save Bet'}
+      /> */}
+      <button onClick={saveBet} /*disabled={isButtonDisabled}*/>
+        Save Info
+        {/* {isButtonDisabled ? `Saving... (${countdown}s)` : 'Save Bet'} */}
       </button>
 
-      <button onClick={openWinner}>Open Winner</button>
+      <button onClick={openRandNum}>openRandNum</button>
 
       {/* Display the OpenWinner result */}
+      {randNum && (
+        <div>
+          { <p>생성된 랜덤 번호: {randNum}</p>}
+        </div>    
+      )}
+
+      <button onClick={getseednum}>get seednum</button>
+      {seednum && (
+        <div>
+          { <p>응모한 사람 수: {seednum}</p>}
+        </div>    
+      )}
+
+      <button onClick={deletearray}>delete array</button>
+
+      <button onClick={openWinner}>openWinner</button>
       {openWinnerResult && (
         <div>
-          <h2>Open Winner Result</h2>
-          <p>Answer Hash: {openWinnerResult[0]}</p>
-          <p>Seed to Byte: {openWinnerResult[1]}</p>
-          <p>Matching Digits: {openWinnerResult[2]}</p>
-        </div>
+          { <p>응모한 사람 수: {openWinnerResult}</p>}
+        </div>    
       )}
+
+      <button onClick={drawlot}>draw</button>
+
+
     </div>
   );
 }
