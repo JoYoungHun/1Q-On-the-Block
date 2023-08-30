@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 
 const ContractAddress = '0xa7604614916399CBB11d2A158b92eAc19257CDA0';
 const ContractABI = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function", "constant": true }, { "inputs": [ { "internalType": "uint256", "name": "inpNum", "type": "uint256" } ], "name": "application", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "setBlockInfo", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "num", "type": "uint256" } ], "name": "generateRandNum", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getrandlist", "outputs": [ { "internalType": "uint256[]", "name": "", "type": "uint256[]" } ], "stateMutability": "view", "type": "function", "constant": true }, { "inputs": [], "name": "optAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "optAllExceptAppl", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ];
-const privateKey = '60e1ffdfd992939207fc387bcab6f38de3e66798bb56fedaa3c02e73aaf57172';
 
 function App() {
   // 컨트랙트와 상호작용하기 위한 변수
