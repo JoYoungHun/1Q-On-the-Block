@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c210ae01-b0a3-457a-8d9e-d586208d81bc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../1Q-contract-ver2/build/contracts/Blockcontract.json" beforeDir="false" afterPath="$PROJECT_DIR$/../1Q-contract-ver2/build/contracts/Blockcontract.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../1Q-contract-ver2/contracts/Blockcontract.sol" beforeDir="false" afterPath="$PROJECT_DIR$/../1Q-contract-ver2/contracts/Blockcontract.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react-1q/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../react-1q/src/App.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="2UKBWm3IDEPo7syVJpFAdpjRn6T" />
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c210ae01-b0a3-457a-8d9e-d586208d81bc" name="Changes" comment="" />
+      <created>1692678426984</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692678426984</updated>
+    </task>
+    <servers />
+  </component>
+</project>

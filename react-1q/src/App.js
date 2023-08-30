@@ -1,164 +1,24 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import Web3 from 'web3';
 
 import React, { useEffect, useState } from 'react';
 
 
-const lotteryAddress = '0x79927D7df76698C6B38bB1ac5c7bDd1D280aA7B8';
-const lotteryABI = [
-  {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [],
-    "name": "_seed",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "applicant",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "randNum",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "application",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "seed",
-        "type": "uint256"
-      }
-    ],
-    "name": "getInfo",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "getSeed",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "deleteApl",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "draw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRand",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  }
-];
+const ContractAddress = '0xa7604614916399CBB11d2A158b92eAc19257CDA0';
+const ContractABI = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function", "constant": true }, { "inputs": [ { "internalType": "uint256", "name": "inpNum", "type": "uint256" } ], "name": "application", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "setBlockInfo", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "num", "type": "uint256" } ], "name": "generateRandNum", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getrandlist", "outputs": [ { "internalType": "uint256[]", "name": "", "type": "uint256[]" } ], "stateMutability": "view", "type": "function", "constant": true }, { "inputs": [], "name": "optAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "optAllExceptAppl", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ];
+const privateKey = '60e1ffdfd992939207fc387bcab6f38de3e66798bb56fedaa3c02e73aaf57172';
 
 function App() {
+  // 컨트랙트와 상호작용하기 위한 변수
   const [lotteryContract, setLotteryContract] = useState(null);
-  const [seednum, setSeednum] = useState("");
+  // 컨트랙트 소유 계정
   const [account, setAccount] = useState("");
-  // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  // 랜덤 넘버 오픈 버튼 활성화/비활성화
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  // 카운트 다운
   // const [countdown, setCountdown] = useState(10);
-  const [openWinnerResult, setOpenWinnerResult] = useState(null);
-  const [randNum, setrandNum] = useState(null);
+  const [inpNum, setinpNum] = useState("");
 
 
 
@@ -198,96 +58,109 @@ function App() {
         console.log('이더리움 브라우저가 아닙니다. MetaMask를 시도해보세요!');
         return;
       }
-      let contract = new window.web3.eth.Contract(lotteryABI, lotteryAddress);
+      let contract = new window.web3.eth.Contract(ContractABI, ContractAddress);
 
       setLotteryContract(contract);
 
       const account = await contract.methods.owner().call();
       setAccount(account);
-      console.log('Owner:', account);
 
-
+      console.log("초기화 완료")
 
     } catch (error) {
       console.error('오류 발생:', error);
     }
   }
 
-  const saveBet = async () => {
+  const apply = async () => {
     try {
       const nonce = await window.web3.eth.getTransactionCount(account);
-      let a = await lotteryContract.methods.application().send({
+      await lotteryContract.methods.application(inpNum).send({
         from: account,
         nonce: nonce,
       });
 
-      console.log(a);
-
       console.log('saved successfully!');
-
-
-      // Start the countdown and disable the button
-      // setCountdown(10);
-      // setIsButtonDisabled(true);
-      
-      // const countdownInterval = setInterval(() => {
-      //   setCountdown((prevCount) => prevCount - 1);
-      // }, 1000);
-
-      // // After 10 seconds, reset the countdown and enable the button
-      // setTimeout(() => {
-      //   clearInterval(countdownInterval);
-      //   setIsButtonDisabled(false);
-      //   setCountdown(10);
-      // }, 10000);
-
     } catch (error) {
       console.error('Error saving bet:', error);
     }
   }
 
-  const openWinner = async () => {
-    try {
-      //const currentBet = /* Create a BetInfo object based on user input */
-      const result = await lotteryContract.methods.getInfo(0).call();
 
-      // Set the OpenWinner result
-      setOpenWinnerResult(result);
-    } catch (error) {
-      console.error('Error opening winner:', error);
-    }
-  }
-
-  const openRandNum = async () => {
-    const rand = await lotteryContract.methods.getRand().call();
-    console.log(rand)
-    setrandNum(rand.toString());
-  }
-
-  const getseednum = async () => {
-    let seedd = (await lotteryContract.methods.getSeed().call());
-    console.log(seedd);
-    setSeednum(seedd.toString());
-    console.log("get seed complete")
-  }
-
-  const deletearray = async () => {
+  const setBlockAndDraw = async () => {
     const nonce = await window.web3.eth.getTransactionCount(account);
-    await lotteryContract.methods.deleteApl().send({
+
+    await lotteryContract.methods.setBlockInfo().send({
+      from: account,
+      nonce: nonce,
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
+    console.log("10초 끝");
+
+    await lotteryContract.methods.generateRandNum(3).send({
+      from: account,
+      nonce: nonce,
+    });
+
+    console.log("generate complete!")
+    getrandlist();
+
+  }
+
+  const getrandlist = async () => {
+    let non = await lotteryContract.methods.getrandlist().call();
+    console.log(non);
+  }
+
+  const delall = async () => {
+    const nonce = await window.web3.eth.getTransactionCount(account);
+    await lotteryContract.methods.optAll().send({
+      from: account,
+      nonce: nonce,
+    });
+    console.log("delete all complete!!")
+  }
+
+  const delAllExceptApl = async () => {
+    const nonce = await window.web3.eth.getTransactionCount(account);
+    await lotteryContract.methods.optAllExceptAppl().send({
       from: account,
       nonce: nonce,
     });
     console.log("delete complete!!")
   }
+  
+  
 
-  const drawlot = async () => {
-    const nonce = await window.web3.eth.getTransactionCount(account);
-    await lotteryContract.methods.draw().send({
-      from: account,
-      nonce: nonce,
-    });
-    console.log("draw complete!!")
-  }
+  // const drawlot = async () => {
+
+  //   try {
+  //     const nonce = await window.web3.eth.getTransactionCount(account);
+  //     await lotteryContract.methods.draw().send({
+  //       from: account,
+  //       nonce: nonce,
+  //     });
+  //     console.log("draw complete!!")
+  //       // 카운트 다운을 시작하고 버튼을 비활성화로 바꿈
+  //       setCountdown(10);
+  //       setIsButtonDisabled(true);
+        
+  //       const countdownInterval = setInterval(() => {
+  //         setCountdown((prevCount) => prevCount - 1);
+  //       }, 1000);
+
+  //       // 10초 후 카운트 다운을 리셋하고, 버튼을 활성화로 바꿈
+  //       setTimeout(() => {
+  //         clearInterval(countdownInterval);
+  //         setIsButtonDisabled(false);
+  //         setCountdown(10);
+  //       }, 10000);
+  //     }catch(error) {
+  //       console.error('Error drawing:', error);
+  //     }
+  // }
 
   
   
@@ -297,42 +170,30 @@ function App() {
   return (
     <div className="App">
       <h1>1Q On The Block</h1>
-      {/* <input
+      <input
         type="number"
-        value={seednum}
-        onChange={(e) => setSeednum(Number(e.target.value))}
-      /> */}
-      <button onClick={saveBet} /*disabled={isButtonDisabled}*/>
-        Save Info
-        {/* {isButtonDisabled ? `Saving... (${countdown}s)` : 'Save Bet'} */}
+        value={inpNum}
+        onChange={(e) => setinpNum(Number(e.target.value))}
+      />
+      <button onClick={apply} /*disabled={isButtonDisabled}*/>
+        apply
       </button>
 
-      <button onClick={openRandNum}>openRandNum</button>
+      {/* 랜덤 넘버 공개 */}
+      <button onClick={setBlockAndDraw} disabled={isButtonDisabled} >
+        draw
+        {/* {isButtonDisabled ? `Generate RandNum... (${countdown}s)` : 'draw' } */}
+      </button>
+      <button onClick={delall}>delall</button>
+      <button onClick={delAllExceptApl}>delAllExceptApl</button>
+      <button onClick={getrandlist}>getrandlist</button>
 
-      {/* Display the OpenWinner result */}
-      {randNum && (
+      {/* openWinnerResult이 존재하면 display */}
+      {/* {openWinnerResult && (
         <div>
-          { <p>생성된 랜덤 번호: {randNum}</p>}
+          { <p>당첨자: {openWinnerResult}</p>}
         </div>    
-      )}
-
-      <button onClick={getseednum}>get seednum</button>
-      {seednum && (
-        <div>
-          { <p>응모한 사람 수: {seednum}</p>}
-        </div>    
-      )}
-
-      <button onClick={deletearray}>delete array</button>
-
-      <button onClick={openWinner}>openWinner</button>
-      {openWinnerResult && (
-        <div>
-          { <p>응모한 사람 수: {openWinnerResult}</p>}
-        </div>    
-      )}
-
-      <button onClick={drawlot}>draw</button>
+      )} */}
 
 
     </div>
