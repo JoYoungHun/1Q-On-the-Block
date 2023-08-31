@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.0;
 
-contract Blockcontract {
+contract RandomNumber {
 
     address public owner;
 
@@ -13,6 +13,7 @@ contract Blockcontract {
     uint256 private resultXOR = 0; // 응모자들이 입력한 값들을 XOR 연산 한 값
     uint256[] private randNumList; // 생성된 랜덤 번호
 
+    uint256 curBlockNum;
     uint256 futureBlockNum;
     bytes32 futureBlockHash;
 
@@ -24,7 +25,7 @@ contract Blockcontract {
 
     // 블록 고정
     function setBlockInfo() public{
-        uint256 curBlockNum = block.number;
+        curBlockNum = block.number;
         futureBlockNum = curBlockNum + (curBlockNum % 5) + 5;
     }
 
@@ -39,7 +40,8 @@ contract Blockcontract {
         return false;
     }
 
-    function generateRandNum(uint256 num) public{
+
+    function generateRandNum(uint256 num) public {
         uint256 _lenAppli = applicants.length;
         if (_lenAppli < 1) { // 참여자가 없을 경우 생성 불가
             revert("no applicant. can't generate random Number");
@@ -67,10 +69,20 @@ contract Blockcontract {
         }                   
     }
 
+    // 생성된 랜덤 번호 반환
     function getrandlist() public view returns(uint256[] memory) {
         return randNumList;
     }
 
+    function getAllInfo() public view returns(address[] memory, uint256, uint256, uint256, bytes32, uint256[] memory) {
+        
+        return (applicants, resultXOR, curBlockNum, futureBlockNum, futureBlockHash, randNumList);
+    }
+
+
+
+
+    // 전체 변수 초기화
     function optAll() public{
         uint256 _len = applicants.length;
         for(uint256 i = 0 ; i < _len ; i++) {
@@ -85,6 +97,7 @@ contract Blockcontract {
         resultXOR = 0;
     }
 
+    // 응모자만 제외하고 초기화 (테스트용)
     function optAllExceptAppl() public{
         uint256 _len = applicants.length;
 
