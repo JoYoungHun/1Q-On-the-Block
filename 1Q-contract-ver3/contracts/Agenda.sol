@@ -3,9 +3,8 @@ pragma solidity 0.8.1;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RandomNumber.sol";
-import "./TrophyToken.sol";
 import "./PudingToken.sol";
-import "./myToken.sol";
+import "./TrophyToken.sol";
 
 contract Agenda is Ownable{
     uint256 eth = 10**18;
@@ -27,11 +26,16 @@ contract Agenda is Ownable{
     TrophyToken public trophytoken;
 
     string imageURI; // NFT Image URL
+    
+
+    // for test
+    // address[] private applicants = [0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79,0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79,0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79];
+    // uint256 private WINNERS_COUNT = 1; // 당첨자 수
+
 
     // 생성자 함수
     // 안건 제목, 타입, 시작일, 종료일, 랜덤 컨트랙트 주소, 토큰 컨트랙트 주소, NFT 주소, NFT 이미지 URI
-    constructor (string memory _Title, string memory _AgendaType, uint256 _StartDateTime, uint256 _EndDateTime, address _randAddr, address _pudAddr, address _nftAddr, string _imageURI) {
-        transferOwnership(msg.sender);
+    constructor (string memory _Title, string memory _AgendaType, uint256 _StartDateTime, uint256 _EndDateTime, address _randAddr, address _pudAddr, address _nftAddr, string memory _imageURI) {
         TITLE = _Title;
         AGENDA_TYPE = _AgendaType;
         START_DATETIME = _StartDateTime;
@@ -87,19 +91,19 @@ contract Agenda is Ownable{
     }
 
     // 블록 세팅하기
-    function setBlockInfo() public{
+    function setBlockInfo() public onlyOwner{
         randomnumber.setBlockInfo();
     }
 
     // 추첨하기
-    function draw() public{
+    function draw() public onlyOwner{
         // num 갯수만큼 랜덤 번호 생성
         winNum = randomnumber.generateRandNum(WINNERS_COUNT, applicants.length, resultXOR);
 
         // 생성된 랜덤 번호와 응모자 매칭
         for (uint256 i = 0 ; i < WINNERS_COUNT; i++) {
             winners.push(applicants[winNum[i]]);
-            trophytoken.safeMint(winners[i], imageURL);
+            trophytoken.safeMint(winners[i], imageURI);
         }
 
         randomnumber.optAll(WINNERS_COUNT);
@@ -128,6 +132,7 @@ contract Agenda is Ownable{
         return randomnumber.getInfo();
     }
 
+    // 응모자 정보, XOR 연산 값 가져오기
     function getAppInfo() public view returns(address[] memory, uint256) {
         return (applicants,resultXOR);
     }

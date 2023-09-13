@@ -69,7 +69,7 @@ contract RandomNumber {
         curTimestamp = 0;
     }
 
-    // 테스트용
+    // 정보 확인
     function getInfo() public view returns(uint256, uint256, bytes32, uint256) {
         return (curBlockNum, futureBlockNum, futureBlockHash, curTimestamp);
     }
