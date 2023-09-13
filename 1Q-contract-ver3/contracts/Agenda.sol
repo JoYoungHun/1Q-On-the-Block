@@ -14,9 +14,9 @@ contract Agenda is Ownable{
     uint256 private START_DATETIME; // TIMESTAMP
     uint256 private END_DATETIME; // TIMESTAMP
 
-    uint256 private WINNERS_COUNT = 1; // 당첨자 수
+    uint256 private WINNERS_COUNT; // 당첨자 수
  
-    address[] private applicants = [0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79, 0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79, 0xE74B66fCD6d6D9d23474c24EA70Ad71373cD5E79];
+    address[] private applicants;
     uint256 resultXOR = 0;
 
     uint256[] private winNum;
@@ -28,6 +28,8 @@ contract Agenda is Ownable{
 
     string imageURI; // NFT Image URL
 
+    // 생성자 함수
+    // 안건 제목, 타입, 시작일, 종료일, 랜덤 컨트랙트 주소, 토큰 컨트랙트 주소, NFT 주소, NFT 이미지 URI
     constructor (string memory _Title, string memory _AgendaType, uint256 _StartDateTime, uint256 _EndDateTime, address _randAddr, address _pudAddr, address _nftAddr, string _imageURI) {
         transferOwnership(msg.sender);
         TITLE = _Title;
@@ -84,6 +86,11 @@ contract Agenda is Ownable{
         }
     }
 
+    // 블록 세팅하기
+    function setBlockInfo() public{
+        randomnumber.setBlockInfo();
+    }
+
     // 추첨하기
     function draw() public{
         // num 갯수만큼 랜덤 번호 생성
@@ -124,10 +131,5 @@ contract Agenda is Ownable{
     function getAppInfo() public view returns(address[] memory, uint256) {
         return (applicants,resultXOR);
     }
-
-    // 블록 정보 가져오기
-    function setBlockInfo() public{
-        randomnumber.setBlockInfo();
-    } 
 
 }
