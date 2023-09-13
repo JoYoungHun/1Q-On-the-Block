@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.0;
+pragma solidity 0.8.1;
 
 contract RandomNumber {
 
@@ -70,8 +70,7 @@ contract RandomNumber {
     }
 
     // 테스트용
-
-    function getInfoo() public view returns(uint256, uint256, bytes32, uint256) {
+    function getInfo() public view returns(uint256, uint256, bytes32, uint256) {
         return (curBlockNum, futureBlockNum, futureBlockHash, curTimestamp);
     }
 }
